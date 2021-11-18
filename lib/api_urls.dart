@@ -7,6 +7,7 @@ const String emgRes = "https://urbanexample.000webhostapp.com/emg_resourcs.html"
 
 const String kLoginUrl = "${kServer_Base_Url}Login";
 const String kSignUpUrl = "${kServer_Base_Url}Signup";
+const String kSendNotification = "${kServer_Base_Url}SendNotification";
 const String kVerifyEmailUrl = "${kServer_Base_Url}Verify_mail";
 
 // home page urls
@@ -32,4 +33,5 @@ const String kDeleteService = "${kServer_Base_Url}provider/DeleteMyService";
 const String kAddServiceUrl = "${kServer_Base_Url}provider/AddService";
 const String kFetchServiceUrl = "${kServer_Base_Url}provider/FetchService";
 const String kFetchDashboard = "${kServer_Base_Url}provider/DashboardData";
-
+const String kFetchProviderCurrentBook = "${kServer_Base_Url}provider/FetchCurrentBooking";
+const String kFetchProviderPastBooking = "${kServer_Base_Url}provider/FetchPreviousBooking";

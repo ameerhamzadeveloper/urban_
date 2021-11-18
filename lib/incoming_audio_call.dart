@@ -68,6 +68,7 @@ class _IncomingAudioCallState extends State<IncomingAudioCall> {
                             isRedPress = !isRedPress;
                           });
                         });
+                        Navigator.pop(context);
                       },
                       child: Container(
                         height: isRedPress ? 60 :70,
@@ -100,6 +101,7 @@ class _IncomingAudioCallState extends State<IncomingAudioCall> {
                             isGreenPress = !isGreenPress;
                           });
                         });
+
                       },
                       child: Container(
                         height: isGreenPress ? 60 :70,

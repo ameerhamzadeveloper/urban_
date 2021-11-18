@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jitsi_meet/feature_flag/feature_flag.dart';
+import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:urban/api_urls.dart';
@@ -123,26 +125,30 @@ class SignInSignUpProvider extends ChangeNotifier {
   }
 
   Future<void> registerWithFacebook(BuildContext context, namee, id,toekn) async {
-    print(fcmToken);
     try {
-      print(namee);
-      print(id);
+      print("nameeee ${namee.toString()}");
+      print("tokeeeen ${toekn.toString()}");
+      print("idddddd ${id.toString()}");
+      Map<String,dynamic> body =
+         ({
+          'firstName': namee.toString(),
+          // 'lastName': "",
+          'city': '',
+          'email': id.toString(),
+          'password': '',
+          'fcmToken': fcmToken.toString(),
+          'userType': '0',
+          'provider': '0',
+          'signUpMode': 'facebook',
+          'outhId': id.toString(),
+        });
       http.Response response = await http.post(Uri.parse(kSignUpUrl),
-          body: ({
-            'firstName': namee.toString(),
-            'lastName': "",
-            'city': 'null',
-            'email': id.toString(),
-            'password': '',
-            'fcmToken': fcmToken,
-            'userType': isBuyerSelect ? '0' : '1',
-            'provider': isBuyerSelect ? '0' : '1',
-            'signUpMode': 'facebook',
-            'outhId': toekn.toString(),
-          }));
+          body: body);
+      print(body.toString());
       var de = json.decode(response.body);
-      print(de);
+      print(response.statusCode);
       if (response.statusCode == 200) {
+        print(de);
         if (de['message'] == 'Success') {
           print(de);
           print(de['data']['userId']);
@@ -328,14 +334,14 @@ class SignInSignUpProvider extends ChangeNotifier {
   Future<void> saveInfoToShared() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('userId', userId.toString());
-    preferences.setString('firstName', userFirstName);
-    preferences.setString('lastName', userLasttName);
-    preferences.setString('email', userEmail);
-    preferences.setString('city', userCity);
-    preferences.setString('userType', userType);
-    preferences.setString('accessToken', accessToken);
+    preferences.setString('firstName', userFirstName ?? "");
+    preferences.setString('lastName', userLasttName ?? "");
+    preferences.setString('email', userEmail ?? "");
+    preferences.setString('city', userCity ?? "");
+    preferences.setString('userType', userType ?? "");
+    preferences.setString('accessToken', accessToken ?? "");
     preferences.setString('provider', isProviderSelect ? "Yes" : "No");
-    preferences.setString('user', isBuyerSelect ? "Yes" : "No");
+    preferences.setString('user', "Yes");
   }
 
   Future<void> getFromSharedPref() async {
@@ -370,5 +376,138 @@ class SignInSignUpProvider extends ChangeNotifier {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.clear();
     notifyListeners();
+  }
+
+
+  Future<void> callNotification(String fcmTo,String roomId,String callType)async{
+    Uri uri = Uri.parse(kSendNotification);
+    http.Response response = await http.post(uri,body: ({
+      'title': '$sHuserFirst has Booked Service!',
+      'fcmToken': fcmTo,
+      'firstName': sHuserFirst.toString(),
+      'roomId': roomId,
+      'call': callType,
+      'userId': sHuserid.toString(),
+      'chanelId':'metis',
+    }));
+    var de = json.decode(response.body);
+    print(de);
+  }
+
+
+  void joinVideoMeeting() async {
+    try {
+      FeatureFlag featureFlag = FeatureFlag();
+      featureFlag.welcomePageEnabled = false;
+      featureFlag.addPeopleEnabled = false;
+      featureFlag.inviteEnabled = false;
+      featureFlag.videoShareButtonEnabled = false;
+      featureFlag.resolution = FeatureFlagVideoResolution.HD_RESOLUTION; // Limit video resolution to 1280p
+      var options = JitsiMeetingOptions(room : '${sHuserFirst!.substring(0, 3)}$sHuserid')
+      // ..audioOnly = true
+        ..subject = "Consultant"
+        ..userDisplayName = sHuserFirst.toString()
+        ..userEmail = sHuserEmail.toString();
+
+      await JitsiMeet.joinMeeting(
+          options,
+          listener: JitsiMeetingListener(
+              onConferenceTerminated: (user){
+                print(user);
+                print("User Ended");
+              }
+          )
+      );
+      print("Mot sendt");
+    } catch (error) {
+      debugPrint("error: $error");
+    }
+  }
+
+  void joinAudioMeeting() async {
+    try {
+      FeatureFlag featureFlag = FeatureFlag();
+      featureFlag.welcomePageEnabled = false;
+      featureFlag.addPeopleEnabled = false;
+      featureFlag.inviteEnabled = false;
+      featureFlag.videoShareButtonEnabled = false;
+      featureFlag.resolution = FeatureFlagVideoResolution.HD_RESOLUTION; // Limit video resolution to 1280p
+      var options = JitsiMeetingOptions(room : '${sHuserFirst!.substring(0,3)}$sHuserid')
+      ..audioOnly = true
+        ..subject = "Consultant"
+        ..userDisplayName = sHuserFirst.toString()
+        ..userEmail = sHuserEmail.toString();
+
+      await JitsiMeet.joinMeeting(
+          options,
+          listener: JitsiMeetingListener(
+              onConferenceTerminated: (user){
+                print(user);
+                print("User Ended");
+              }
+          )
+      );
+      print("Mot sendt");
+    } catch (error) {
+      debugPrint("error: $error");
+    }
+  }
+
+  void acceptVideoMeeting(String roomID) async {
+    try {
+      FeatureFlag featureFlag = FeatureFlag();
+      featureFlag.welcomePageEnabled = false;
+      featureFlag.addPeopleEnabled = false;
+      featureFlag.inviteEnabled = false;
+      featureFlag.videoShareButtonEnabled = false;
+      featureFlag.resolution = FeatureFlagVideoResolution.HD_RESOLUTION; // Limit video resolution to 1280p
+      var options = JitsiMeetingOptions(room : roomID)
+      // ..audioOnly = true
+        ..subject = "Consultant"
+        ..userDisplayName = sHuserid.toString()
+        ..userEmail = sHuserEmail.toString();
+
+      await JitsiMeet.joinMeeting(
+          options,
+          listener: JitsiMeetingListener(
+              onConferenceTerminated: (user){
+                print(user);
+                print("User Ended");
+              }
+          )
+      );
+      print("Mot sendt");
+    } catch (error) {
+      debugPrint("error: $error");
+    }
+  }
+
+  void acceptAudioMeetings(String roomID) async {
+    try {
+      FeatureFlag featureFlag = FeatureFlag();
+      featureFlag.welcomePageEnabled = false;
+      featureFlag.addPeopleEnabled = false;
+      featureFlag.inviteEnabled = false;
+      featureFlag.videoShareButtonEnabled = false;
+      featureFlag.resolution = FeatureFlagVideoResolution.HD_RESOLUTION; // Limit video resolution to 1280p
+      var options = JitsiMeetingOptions(room : roomID)
+        ..audioOnly = true
+        ..subject = "Consultant"
+        ..userDisplayName = sHuserid.toString()
+        ..userEmail = sHuserEmail.toString();
+
+      await JitsiMeet.joinMeeting(
+          options,
+          listener: JitsiMeetingListener(
+              onConferenceTerminated: (user){
+                print(user);
+                print("User Ended");
+              }
+          )
+      );
+      print("Mot sendt");
+    } catch (error) {
+      debugPrint("error: $error");
+    }
   }
 }

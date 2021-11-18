@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttericon/web_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:urban/constants.dart';
 import 'package:urban/customerApp/services/book_service.dart';
-import 'package:urban/customerApp/shimmer_widgets/booking_shimmer_widget.dart';
+import 'package:urban/customerApp/services/home_page_services.dart';
+import 'package:urban/customerApp/views/sub_category_page.dart';
+
 class CurrentBookings extends StatefulWidget {
   @override
   _CurrentBookingsState createState() => _CurrentBookingsState();
@@ -18,6 +21,7 @@ class _CurrentBookingsState extends State<CurrentBookings> {
   @override
   Widget build(BuildContext context) {
     final pro = Provider.of<BookService>(context);
+    final pror = Provider.of<HomePageServices>(context);
     return Scaffold(
       body: pro.currentBook!.length == 0 ?  Container(
         color: Colors.grey[300],
@@ -44,7 +48,13 @@ class _CurrentBookingsState extends State<CurrentBookings> {
                         shape: StadiumBorder(),
                         minWidth: MediaQuery.of(context).size.width,
                         color: kButtonColor,
-                        onPressed: (){},
+                        onPressed: (){
+                          pror.fetchSubCategoris('4');
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SubCategoryScreen()));
+                        },
                         child: Text("Book now"),
                       )
                     ],
@@ -71,7 +81,31 @@ class _CurrentBookingsState extends State<CurrentBookings> {
                       child: Container(
                         child: Column(
                           children: [
-                            Image.network("${pro.currentBook?[i].serviceImage}"),
+                            Stack(
+                              children: [
+                                Image.network("${pro.currentBook?[i].serviceImage}",height: 200,fit: BoxFit.cover,width: MediaQuery.of(context).size.width,),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: IconButton(
+                                          onPressed: (){
+                                            print(pro.currentBook?[i]);
+                                            // Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen(pro.currentBook?[i].serviceName ?? "",pro.currentBook?[i].bookingStatus ?? "",)));
+                                          },
+                                          icon: Icon(WebSymbols.chat,color: kProfileCircleBorderColor,),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                             SizedBox(height: 10,),
                             Text(pro.currentBook?[i].serviceName ?? "",style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
                             SizedBox(height: 10,),

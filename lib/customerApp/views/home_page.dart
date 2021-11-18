@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:urban/customerApp/services/book_service.dart';
@@ -47,46 +46,55 @@ class _HomePageState extends State<HomePage> {
           : Padding(
               padding: const EdgeInsets.all(10.0),
               child: ListView.builder(
+                shrinkWrap: true,
                 itemCount: pro.categories == null ? 3 : 1,
                 itemBuilder: (ctx, i) {
                   final categori = pro.categories?[i];
                   return InkWell(
                     onTap: () {
-                      pro.getLocation();
+                      // pro.getLocation();
                       pro.fetchSubCategoris(categori!.categoryId.toString());
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => SubCategoryScreen()));
                     },
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.network(
-                              categori!.categoryImage ??
-                                  "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg",
-                              height: 230,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              categori.categoryName ?? "",
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              categori.description ??
-                                  "Book online mental healthcare, in the comfort of your own home",
-                              style: TextStyle(color: Colors.grey),
-                            )
-                          ],
+                    child: SizedBox(
+                      height: 500,
+                      width: double.infinity,
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Image.network(
+                                  categori!.categoryImage ??
+                                      "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg",
+                                  // height: 340,
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                categori.categoryName ?? "",
+                                style: TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                categori.description ??
+                                    "Book online mental healthcare, in the comfort of your own home",
+                                style: TextStyle(color: Colors.grey),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

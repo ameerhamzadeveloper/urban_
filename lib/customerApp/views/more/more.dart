@@ -5,8 +5,8 @@ import 'package:fluttericon/linecons_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
 import 'package:fluttericon/web_symbols_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urban/constants.dart';
-import 'package:urban/customerApp/services/home_page_services.dart';
 import 'package:urban/customerApp/views/more/about_app.dart';
 import 'package:urban/customerApp/views/more/account_settings.dart';
 import 'package:urban/customerApp/views/more/emergency_resources.dart';
@@ -15,6 +15,7 @@ import 'package:urban/customerApp/views/more/gift.dart';
 import 'package:urban/customerApp/views/more/messages.dart';
 import 'package:urban/customerApp/views/more/wallet.dart';
 import 'package:urban/customerApp/views/support.dart';
+import 'package:urban/providerApp/views/home_page.dart';
 import 'package:urban/services/sign_in_sign_up.dart';
 
 class More extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MoreState extends State<More> {
   @override
   Widget build(BuildContext context) {
     final pro = Provider.of<SignInSignUpProvider>(context);
-    final proh = Provider.of<HomePageServices>(context);
+    // final proh = Provider.of<HomePageServices>(context);
     return Scaffold(
         // backgroundColor: Colors.redAccent,
         body: SingleChildScrollView(
@@ -58,7 +59,7 @@ class _MoreState extends State<More> {
                                   radius: 30,
                                   backgroundColor: page2Color,
                                   child: Text(
-                                    "${pro.sHuserFirst!.substring(0, 1).toUpperCase()}${pro.sHuserLast!.substring(0, 1).toUpperCase()}",
+                                    "${pro.sHuserFirst!.substring(0, 1).toUpperCase()} ${pro.sHuserLast!.length > 0 ? pro.sHuserLast!.substring(0, 1).toUpperCase() : ""}",
                                     style:
                                     TextStyle(fontSize: 30, fontWeight: FontWeight.bold,color: Colors.white),
                                   ),
@@ -77,12 +78,23 @@ class _MoreState extends State<More> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              pro.sHuserFirst == null ? "Loading..." : "${pro.sHuserFirst} ${pro.sHuserLast}",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                            Row(
+                              children: [
+                                Text(
+                                  pro.sHuserFirst == null ? "" : "${pro.sHuserFirst}",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Text(
+                                  pro.sHuserLast != null ? "" : "${pro.sHuserLast}",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
                             ),
                             SizedBox(
                               height: 5,
@@ -96,33 +108,37 @@ class _MoreState extends State<More> {
                         ),
                       ],
                     ),
-                    Column(
+                    Row(
                       children: [
-                        InkWell(
-                          onTap: () async{
-                            // print(pro.sHuserid);
-                            Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AccountSettings()));
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Icon(
-                                  Icons.arrow_forward_outlined,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              )),
-                        )
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () async{
+                                // print(pro.sHuserid);
+                                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AccountSettings()));
+                              },
+                              child: Container(
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.white)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Icon(
+                                      Icons.arrow_forward_outlined,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
                       ],
-                    ),
-                    SizedBox(
-                      height: 10,
                     ),
                   ],
                 ),
@@ -136,11 +152,13 @@ class _MoreState extends State<More> {
           trailing: Switch(
         value: isSeller,
         activeColor: Colors.black,
-        onChanged: (val) {
+        onChanged: (val) async{
           setState(() {
             isSeller = !isSeller;
           });
-          proh.checkProviderAccount(context);
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ProviderHomePage()),(route) => false);
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          preferences.setString('provider', "Yes");
           if (val == true) {
             // Navigator.pushReplacement(
             //     context,

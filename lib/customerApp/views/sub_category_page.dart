@@ -54,7 +54,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                     itemBuilder: (ctx, i) {
                       var subCat = pro.subCategories?[i];
                       return Container(
-                        height: 400,
+                        // height: 400,
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
@@ -71,7 +71,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      height: 130,
+                                      height: 450,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(20.0),

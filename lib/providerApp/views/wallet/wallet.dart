@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
-import 'package:urban/constants.dart';
-import 'package:urban/providerApp/views/wallet/credit.dart';
-import 'package:urban/providerApp/views/wallet/payment.dart';
 class ProviderWallet extends StatefulWidget {
   @override
   _ProviderWalletState createState() => _ProviderWalletState();
@@ -11,40 +8,38 @@ class ProviderWallet extends StatefulWidget {
 class _ProviderWalletState extends State<ProviderWallet> {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      initialIndex: 0,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: (){
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back,color: Colors.black,),
-          ),
-          actions: [
-            // IconButton(onPressed: (){}, icon: Icon(Icons.info,color: Colors.grey,))
-          ],
-          title: Text("Wallet"),
-          bottom: TabBar(
-            labelColor: Colors.black,
-            indicatorColor: kProfileCircleBorderColor,
-            tabs: [
-              Tab(
-                text: "PAYMENT",
-              ),
-              Tab(
-                text: "CREDIT",
-              )
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back,color: Colors.black,),
         ),
-        body: TabBarView(
+        actions: [
+          // IconButton(onPressed: (){}, icon: Icon(Icons.info,color: Colors.grey,))
+        ],
+        title: Text("Wallet"),
+    ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            Payment(),
-            Credit()
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Add new payment method",style: TextStyle(fontSize: 18),),
+                Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        shape: BoxShape.circle
+                    ),
+                    child: Center(child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward))))
+              ],
+            )
           ],
-        )
+        ),
       ),
     );
   }

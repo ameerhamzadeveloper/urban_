@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:country_list_pick/country_list_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

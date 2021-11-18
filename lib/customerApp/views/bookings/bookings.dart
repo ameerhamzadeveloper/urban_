@@ -29,7 +29,9 @@ class _BookingsState extends State<Bookings> {
         body: TabBarView(
           children: [
             CurrentBookings(),
-            PastBookings()
+            Container(
+              height: MediaQuery.of(context).size.height,
+              child: PastBookings())
           ],
         )
       ),

@@ -1,4 +1,3 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urban/customerApp/services/payment_service.dart';
@@ -12,31 +11,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   String? provider;
   String? user;
 
-
-  Future<void> intiFunction()async{
+  Future<void> intiFunction() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     provider = preferences.getString('provider');
     user = preferences.getString('user');
     StripeService.init();
-    Future.delayed(Duration(seconds: 3),(){
+    Future.delayed(Duration(seconds: 3), () {
       routeFunction();
       print(user);
       print(provider);
     });
   }
-  void routeFunction(){
-    if(provider == "Yes"){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FeatureDiscovery(
-          recordStepsInSharedPreferences: false,
-          child: ProviderHomePage())));
-    }else if(user == "Yes"){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavBar()));
-    }else{
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => IntroPage()));
+
+  void routeFunction() {
+    if (provider == "Yes") {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => ProviderHomePage()));
+    } else if (user == "Yes") {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => BottomNavBar()));
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => IntroPage()));
     }
   }
 
@@ -44,14 +43,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     intiFunction();
-
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset("images/icon.png",height: 200,width: 200,),
+        child: Image.asset(
+          "images/icon.png",
+          height: 200,
+          width: 200,
+        ),
       ),
     );
   }

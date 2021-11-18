@@ -35,9 +35,12 @@ class BookService extends ChangeNotifier{
       'serviceAmount': homePro.providerServices!.servicePrice,
       'serviceProviderId': homePro.providerServices!.userId,
     }));
+    print("called");
+    print(jsonDecode(response.body));
     if (200 == response.statusCode) {
       var de =jsonDecode(response.body);
       if(de['status'] == 1){
+        idPro.callNotification("erASg-9dQFqI2lntLhRlSA:APA91bHfffSCboWuYwf-1hTbwObfv1NpY-ZMjbDcJFJymY5jqapVoObZ3yGjrVyxij77kAWOQWC99xx6haUPEdXMtQRXlQcUySPj5WAa55kjoGNjU7gzubtZFXmOMvRKituWU8UEGsaL", "roomId", "audio");
         fetchCurrentBooked(context);
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavBar()), (route) => false);
         Fluttertoast.showToast(
@@ -53,7 +56,7 @@ class BookService extends ChangeNotifier{
     notifyListeners();
   }
 
-  List<CurrentBooking>? currentBook;
+  List<CurrentBooking>? currentBook = [];
 
   Future<void> fetchCurrentBooked(BuildContext context)async{
     currentFetch();

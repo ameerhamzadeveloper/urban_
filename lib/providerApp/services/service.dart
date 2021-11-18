@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urban/api_urls.dart';
+import 'package:urban/customerApp/models/current_booking_model.dart';
+import 'package:urban/customerApp/models/fetch_previous_booking.dart';
 import 'package:urban/navigation_transactions/bounce_transactions.dart';
 import 'package:urban/providerApp/model/services_model.dart';
 import 'package:urban/providerApp/views/services/success_message.dart';
@@ -298,6 +300,42 @@ class Services extends ChangeNotifier {
     }));
     if(200 == response.statusCode){
       print(json.decode(response.body));
+    }
+    notifyListeners();
+  }
+
+  List<CurrentBooking>? currentBook;
+  Future<void> fetchCurrentBooked(BuildContext context)async{
+    final idPro = Provider.of<SignInSignUpProvider>(context,listen: false);
+    Uri url = Uri.parse(kFetchProviderCurrentBook);
+    http.Response response = await http.post(url,body: ({
+      'userId': idPro.sHuserid,
+    }));
+    if(response.statusCode == 200){
+      var data = currentOrderModelFromJson(response.body);
+      currentBook = data.data;
+      print(currentBook.toString());
+    }else{
+      currentBook  = [];
+    }
+    notifyListeners();
+  }
+
+
+  List<PreviousBooking>? pastBooking;
+
+  Future<void> fetchPastBooking(BuildContext context)async{
+    final idPro = Provider.of<SignInSignUpProvider>(context,listen: false);
+    Uri url = Uri.parse(kFetchProviderPastBooking);
+    http.Response response = await http.post(url,body: ({
+      'userId': idPro.sHuserid,
+    }));
+    if(response.statusCode == 200){
+      var data = fetchPreviousBookingFromJson(response.body);
+      pastBooking = data.data;
+      print(pastBooking.toString());
+    }else{
+      pastBooking  = [];
     }
     notifyListeners();
   }

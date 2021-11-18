@@ -79,30 +79,28 @@ class _ProvidersScreenState extends State<ProvidersScreen> {
                 shrinkWrap: true,
                 itemCount: pro.serviceTime.length,
                 itemBuilder: (ctx,i){
-                  return Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(1.0),
-                      child: MaterialButton(
-                          color: pro.serviceTime[i].isSelected ? page1Color : page2Color,
-                          onPressed: (){
-                            pro.clearProvidersList();
-                            pro.makeTimeSelec(i);
-                            pro.timeSelected();
-                            pro.selectedTime = pro.serviceTime[i].time;
-                            pro.fetchNearProviders('1');
-                          },
-                          child: pro.serviceTime[i].isSelected ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(pro.serviceTime[i].time,style: TextStyle(color: pro.serviceTime[i].isSelected ? Colors.white : Colors.black),),
-                              SizedBox(height: 5,),
-                              CircleAvatar(
-                                radius: 10,
-                                  backgroundColor:Colors.white,
-                                  child: Icon(Icons.check,color: Color(0xff00032D),size: 15,))
-                            ],
-                          ) : Text(pro.serviceTime[i].time,style: TextStyle(color: pro.serviceTime[i].isSelected ? Colors.white : Colors.black),),
-                      ),
+                  return Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: MaterialButton(
+                        color: pro.serviceTime[i].isSelected ? page1Color : page2Color,
+                        onPressed: (){
+                          pro.clearProvidersList();
+                          pro.makeTimeSelec(i);
+                          pro.timeSelected();
+                          pro.selectedTime = pro.serviceTime[i].time;
+                          pro.fetchNearProviders('1');
+                        },
+                        child: pro.serviceTime[i].isSelected ? Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(pro.serviceTime[i].time,style: TextStyle(color: pro.serviceTime[i].isSelected ? Colors.white : Colors.black),),
+                            SizedBox(height: 5,),
+                            CircleAvatar(
+                              radius: 10,
+                                backgroundColor:Colors.white,
+                                child: Icon(Icons.check,color: Color(0xff00032D),size: 15,))
+                          ],
+                        ) : Text(pro.serviceTime[i].time,style: TextStyle(color: pro.serviceTime[i].isSelected ? Colors.white : Colors.black),),
                     ),
                   );
                 },
@@ -126,7 +124,7 @@ class _ProvidersScreenState extends State<ProvidersScreen> {
                 shrinkWrap: true,
                 children: List.generate(pro.nearProviders == null ? 0 : pro.nearProviders!.length, (i) {
                   return Container(
-                    height: 150,
+                    // height: 250,
                     child: InkWell(
                       onTap: ()async{
                         await pro.fetchProviderAndServiceDetails(pro.nearProviders?[i].serviceId.toString());
@@ -151,7 +149,6 @@ class _ProvidersScreenState extends State<ProvidersScreen> {
                               child: SelectPeriodBottomSheet(pro.nearProviders?[i].serviceName.toString()),
                             ));
                         print(pro.nearProviders?[i].serviceId);
-
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -165,23 +162,26 @@ class _ProvidersScreenState extends State<ProvidersScreen> {
                           child: Column(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                height: 100,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(pro.nearProviders?[i].serviceImage ?? "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg")
+                              Expanded(
+                                child: Container(
+                                  // height: 80,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(pro.nearProviders?[i].serviceImage ?? "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg")
+                                    ),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      topRight: Radius.circular(20.0),
+                                      bottomLeft: Radius.circular(30),
+                                      bottomRight: Radius.circular(30)
+                                    )
                                   ),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20.0),
-                                    topRight: Radius.circular(20.0),
-                                    bottomLeft: Radius.circular(30),
-                                    bottomRight: Radius.circular(30)
-                                  )
                                 ),
                               ),
-                              SizedBox(height: 5,),
-                              Text(pro.nearProviders?[i].serviceName ?? "",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              SizedBox(height: 10,),
+                              Text(pro.nearProviders?[i].serviceName ?? "",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                              SizedBox(height: 10,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -189,6 +189,7 @@ class _ProvidersScreenState extends State<ProvidersScreen> {
                                   Text(pro.nearProviders?[i].servicePrice ?? "")
                                 ],
                               ),
+
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -196,7 +197,8 @@ class _ProvidersScreenState extends State<ProvidersScreen> {
                                   SizedBox(width: 5,),
                                   Text("${pro.nearProviders?[i].distance ?? ""}")
                                 ],
-                              )
+                              ),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),

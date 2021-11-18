@@ -14,6 +14,7 @@ class _PastBookingsState extends State<PastBookings> {
     final pro = Provider.of<BookService>(context);
     return Scaffold(
       body: pro.pastBooking!.length == 0 ? Container(
+        // height: MediaQuery.of(context).size.height,
         color: Colors.grey[300],
         child: Column(
           children: [
@@ -27,21 +28,23 @@ class _PastBookingsState extends State<PastBookings> {
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("You haven't booked yet",style: TextStyle(fontSize: 30,color: Colors.black,fontWeight: FontWeight.bold),),
-                      SizedBox(height: 20,),
-                      Text("You don't have any upcomming bookings to display",style: TextStyle(color: Colors.grey),),
-                      SizedBox(height: 20,),
-                      MaterialButton(
-                        shape: StadiumBorder(),
-                        minWidth: MediaQuery.of(context).size.width,
-                        color: kButtonColor,
-                        onPressed: (){},
-                        child: Text("Book now"),
-                      )
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("You haven't booked yet",style: TextStyle(fontSize: 30,color: Colors.black,fontWeight: FontWeight.bold),),
+                        SizedBox(height: 20,),
+                        Text("You don't have any upcomming bookings to display",style: TextStyle(color: Colors.grey),),
+                        SizedBox(height: 20,),
+                        MaterialButton(
+                          shape: StadiumBorder(),
+                          minWidth: MediaQuery.of(context).size.width,
+                          color: kButtonColor,
+                          onPressed: (){},
+                          child: Text("Book now"),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -51,6 +54,7 @@ class _PastBookingsState extends State<PastBookings> {
       ):Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
+          shrinkWrap: true,
           itemCount: pro.pastBooking != null ? pro.pastBooking!.length : 0,
           itemBuilder: (ctx,i){
             var pr = pro.pastBooking?[i];

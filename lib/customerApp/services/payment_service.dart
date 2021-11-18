@@ -7,17 +7,18 @@ class StripeService {
   static String? paymentId;
   static String apiURL = 'https://api.stripe.com/v1';
   static String paymentApiUrl = '${StripeService.apiURL}/payment_intents';
-  static String secret = 'sk_test_51HmL50JgRTIAdsOfHHllCplppQPRt5i297xJFDn4mjxapdTuqwRpcnDLQfPzSgIO1Xm7DGPScSeaZ7fgwbpXTMpG00u00m0c3P'; //your secret from stripe dashboard
+  static String secret = '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'; //your secret from stripe dashboard
   static Map<String, String> headers = {
     'Authorization': 'Bearer ${StripeService.secret}',
     'Content-Type': 'application/x-www-form-urlencoded'
   };
+  
   static init() {
     StripePayment.setOptions(
         StripeOptions(
-          publishableKey:"pk_test_51HmL50JgRTIAdsOfL12aG7nwFoVXJE11KD1IQOvhkWNB86zGEvCFhyyUdotaTKe8fcoYndGmMKwFIgqMgDFzEDvK00UjVDGNvd", // user your api key
+          publishableKey:"pk_live_51JHj0ZEhfYXWKhzb3nrCy2jvARlfqwoyYe6s5eHFplx9D8XxhRrInoRW9IPHSntSkEkDHuLN8Yb3AgGi6YPVRSWv003OlbhuuE", // user your api key
           merchantId: "merchant.themetismarkeetplace",
-          androidPayMode: 'test',
+          androidPayMode: 'production',
         )
     );
   }

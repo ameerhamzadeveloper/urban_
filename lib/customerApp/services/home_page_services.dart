@@ -1,10 +1,7 @@
 import 'dart:convert';
-
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urban/api_urls.dart';
 import 'package:urban/customerApp/models/categories.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +9,6 @@ import 'package:urban/customerApp/models/fav_services.dart';
 import 'package:urban/customerApp/models/nearby_providers.dart';
 import 'package:urban/customerApp/models/provider_service_detail.dart';
 import 'package:urban/customerApp/models/sub_categories.dart';
-import 'package:urban/providerApp/views/home_page.dart';
 import 'package:urban/services/sign_in_sign_up.dart';
 
 // this class is for all home pages API servies use
@@ -238,7 +234,7 @@ class HomePageServices extends ChangeNotifier {
     if (200 == response.statusCode) {
       final result = categoriesFromJson(response.body);
       categories = result.data;
-      print("Success");
+      print(categories);
     } else {
       categories = [];
     }
@@ -248,6 +244,7 @@ class HomePageServices extends ChangeNotifier {
   // fetching home page sub Categories
   List<SubCategoriesData>? subCategories = [];
   Future<void> fetchSubCategoris(String categoryId) async {
+    print(categoryId);
     Uri url = Uri.parse(kSubCategoriesUrl);
     final response = await http.post(url,
         body: ({
@@ -341,22 +338,18 @@ class HomePageServices extends ChangeNotifier {
   }
 
   Future<void> checkProviderAccount(BuildContext context)async{
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString('provider', "Yes");
-    final pro = Provider.of<SignInSignUpProvider>(context,listen: false);
-    Uri url = Uri.parse(kCheckProvider);
-    final response = await http.post(url, body: ({
-      'userId' : pro.sHuserid,
-    }));
-    var dec = json.decode(response.body);
-    print(dec['data']['provider']); 
-    if(response.statusCode == 200){
-      dec['data']['provider'] == '0' ? haveProviderAccount = false : haveProviderAccount = true;
-      print(haveProviderAccount);
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => FeatureDiscovery(
-          recordStepsInSharedPreferences: false,
-          child: ProviderHomePage())),(route) => false);
-    }
+
+    // final pro = Provider.of<SignInSignUpProvider>(context,listen: false);
+    // Uri url = Uri.parse(kCheckProvider);
+    // final response = await http.post(url, body: ({
+    //   'userId' : pro.sHuserid,
+    // }));
+    // var dec = json.decode(response.body);
+    // print(dec['data']['provider']);
+    // if(response.statusCode == 200){
+    //   dec['data']['provider'] == '0' ? haveProviderAccount = false : haveProviderAccount = true;
+    //   print(haveProviderAccount);
+    // }
     notifyListeners();
 
   }

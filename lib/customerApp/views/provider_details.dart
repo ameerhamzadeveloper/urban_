@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stripe_payment/stripe_payment.dart';
 import 'package:urban/constants.dart';
 import 'package:urban/customerApp/services/book_service.dart';
 import 'package:urban/customerApp/services/home_page_services.dart';
-import 'package:urban/customerApp/services/payment_service.dart';
 import 'package:urban/customerApp/services/stripe_charge.dart';
 class ProviderDetails extends StatefulWidget {
   @override
@@ -79,87 +75,89 @@ class _ProviderDetailsState extends State<ProviderDetails> with TickerProviderSt
             expandedHeight: 200,
           ),
           SliverFillRemaining(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       children: [
-                         Text(pro.providerServices!.firstName ?? "Loading...",style: TextStyle(fontSize: 42,fontWeight: FontWeight.bold),),
-                         Row(
-                           children: [
-                             Icon(Icons.star,color: Colors.yellow,),
-                             Text("4.9")
-                           ],
-                         )
-                       ],
-                     ),
-                    DefaultTabController(
-                        length: 2, // length of tabs
-                        initialIndex: 0,
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-                          Container(
-                            child: TabBar(
-                              indicatorColor: kProfileCircleBorderColor,
-                              labelColor: Colors.black,
-                              unselectedLabelColor: Colors.black,
-                              tabs: [
-                                Tab(text: 'About'),
-                                Tab(text: 'Reviews'),
-                              ],
-                            ),
-                          ),
-                          Container(
-                              height: 400, //height of TabBarView
-                              decoration: BoxDecoration(
-                                  border: Border(top: BorderSide(color: Colors.grey, width: 0.5))
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                           Text(pro.providerServices!.firstName ?? "Loading...",style: TextStyle(fontSize: 42,fontWeight: FontWeight.bold),),
+                           Row(
+                             children: [
+                               Icon(Icons.star,color: Colors.yellow,),
+                               Text("4.9")
+                             ],
+                           )
+                         ],
+                       ),
+                      DefaultTabController(
+                          length: 2, // length of tabs
+                          initialIndex: 0,
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+                            Container(
+                              child: TabBar(
+                                indicatorColor: kProfileCircleBorderColor,
+                                labelColor: Colors.black,
+                                unselectedLabelColor: Colors.black,
+                                tabs: [
+                                  Tab(text: 'About'),
+                                  Tab(text: 'Reviews'),
+                                ],
                               ),
-                              child: TabBarView(children: <Widget>[
-                                Container(
-                                  child: Column(
-                                    crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(height: 10,),
-                                      Text("Description",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 10,),
-                                      Text(pro.providerServices!.serviceDescription ?? ""),
-                                      SizedBox(height: 10,),
-                                      // Text("See on map",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                                      // SizedBox(height: 10,),
-                                      // Container(
-                                      //   height: MediaQuery.of(context).size.height / 3,
-                                      //   decoration: BoxDecoration(
-                                      //     border: Border.all(color: Colors.yellowAccent),
-                                      //   ),
-                                      //   child: GoogleMap(
-                                      //     initialCameraPosition:
-                                      //     CameraPosition(target: latLng, zoom: 11.0),
-                                      //     onCameraMove: onCameraMove,
-                                      //     onMapCreated: onMapCreated,
-                                      //     mapType: MapType.normal,
-                                      //     markers: markers,
-                                      //   ),
-                                      // ),
-                                    ],
-                                  )
+                            ),
+                            Container(
+                                height: 400, //height of TabBarView
+                                decoration: BoxDecoration(
+                                    border: Border(top: BorderSide(color: Colors.grey, width: 0.5))
                                 ),
-                                Container(
-                                  child: Center(
-                                    child: Text('No Reviews Yet', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                                child: TabBarView(children: <Widget>[
+                                  Container(
+                                    child: Column(
+                                      crossAxisAlignment:CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 10,),
+                                        Text("Description",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 10,),
+                                        Text(pro.providerServices!.serviceDescription ?? ""),
+                                        SizedBox(height: 10,),
+                                        // Text("See on map",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                        // SizedBox(height: 10,),
+                                        // Container(
+                                        //   height: MediaQuery.of(context).size.height / 3,
+                                        //   decoration: BoxDecoration(
+                                        //     border: Border.all(color: Colors.yellowAccent),
+                                        //   ),
+                                        //   child: GoogleMap(
+                                        //     initialCameraPosition:
+                                        //     CameraPosition(target: latLng, zoom: 11.0),
+                                        //     onCameraMove: onCameraMove,
+                                        //     onMapCreated: onMapCreated,
+                                        //     mapType: MapType.normal,
+                                        //     markers: markers,
+                                        //   ),
+                                        // ),
+                                      ],
+                                    )
                                   ),
-                                ),
-                              ])
-                          )
-                        ])
-                    ),
-                  ],
-                ),
-              )
-            ],
+                                  Container(
+                                    child: Center(
+                                      child: Text('No Reviews Yet', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                                    ),
+                                  ),
+                                ])
+                            )
+                          ])
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
           )
         ],
@@ -172,35 +170,29 @@ class _ProviderDetailsState extends State<ProviderDetails> with TickerProviderSt
           height: 40,
           color: kButtonColor,
           onPressed: (){
-            if(Platform.isAndroid){
-              print("card");
-              StripeCharge.addNewCard(context,"1200", "USD");
-            }else{
-              StripePayment.paymentRequestWithNativePay(
-                androidPayOptions: AndroidPayPaymentRequest(
-                  totalPrice: "1.20",
-                  currencyCode: "USD",
-                ),
-                applePayOptions: ApplePayPaymentOptions(
-                  countryCode: 'US',
-                  currencyCode: 'USD',
-                  items: [
-                    ApplePayItem(
-                      label: 'New Service',
-                      amount: '13',
-                    )
-                  ],
-                ),
-              ).then((token) {
-                print(token.card!.token);
-              });
-            }
+            StripeCharge.addNewCard(context,((int.parse(pro.providerServices!.servicePrice.toString()) * 25) / 100 + int.parse(pro.providerServices!.servicePrice.toString())).round().toString(), "GBP").then((value){
+              print(value.success);
+              if(value.success == true){
+                bookPro.bookService(context);
+              }else{
+                final snackBar = SnackBar(content: Text('Something Went Wrong Try Again!'));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
 
-            bookPro.bookService(context);
+            });
           },
-          child: Text("Book Now",style: TextStyle(fontSize: 22,color: Colors.black),),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Book Now ",style: TextStyle(fontSize: 22,color: Colors.black),),
+              Text("($kPundSign${((int.parse(pro.providerServices!.servicePrice.toString()) * 25) / 100 + int.parse(pro.providerServices!.servicePrice.toString())).round()})",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+            ],
+          ),
         ),
       )
     );
   }
 }
+// 4242 4242 4242 4242
+// 12/23
+// 123

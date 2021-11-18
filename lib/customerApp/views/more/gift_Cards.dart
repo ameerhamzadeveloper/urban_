@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:urban/constants.dart';
-import 'package:urban/customerApp/components/select_book_period_bottom_sheet.dart';
 import 'package:urban/customerApp/views/more/gift_card_bottom_sheet.dart';
 class GiftCards extends StatefulWidget {
   @override

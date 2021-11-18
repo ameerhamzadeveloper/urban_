@@ -91,7 +91,9 @@ class _FbBottomSheetState extends State<FbBottomSheet> {
                         ? CupertinoSwitch(
                       value: isTerms,
                       onChanged: (val) {
-
+                        setState(() {
+                          isTerms = val;
+                        });
                       },
                     )
                         : Switch(
@@ -116,7 +118,7 @@ class _FbBottomSheetState extends State<FbBottomSheet> {
                         ? CupertinoSwitch(
                       value: isDiscount,
                       onChanged: (val) {
-                        makeFirstSwitchButton();
+                        makeSecondSwitchButton();
                       },
                     )
                         : Switch(

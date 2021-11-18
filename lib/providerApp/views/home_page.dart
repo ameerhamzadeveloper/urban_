@@ -1,15 +1,12 @@
-import 'package:feature_discovery/feature_discovery.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:fluttericon/typicons_icons.dart';
+import 'package:fluttericon/web_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:urban/constants.dart';
-import 'package:urban/customerApp/services/book_service.dart';
-import 'package:urban/customerApp/services/home_page_services.dart';
 import 'package:urban/customerApp/views/bottom_nav_bar.dart';
 import 'package:urban/customerApp/views/login_signup.dart';
-import 'package:urban/customerApp/views/provider_profile.dart';
 import 'package:urban/providerApp/bookings/bookings.dart';
 import 'package:urban/providerApp/services/dashboard.dart';
 import 'package:urban/providerApp/services/service.dart';
@@ -31,34 +28,26 @@ class _ProviderHomePageState extends State<ProviderHomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      FeatureDiscovery.discoverFeatures(context,
-          <String>[
-            'drawer',
-            'services',
-          ]
-      );
-    });
     final pro = Provider.of<SignInSignUpProvider>(context,listen: false);
     final proo = Provider.of<Services>(context,listen: false);
     final prood = Provider.of<DashBoard>(context,listen: false);
-    final prob = Provider.of<BookService>(context,listen: false);
+    // final prob = Provider.of<BookService>(context,listen: false);
     pro.getFromSharedPref();
     proo.getUserId();
     prood.fetchDashboardData(context);
     Future.delayed(Duration(seconds: 5),(){
       proo.fetchServices(context);
-      prob.fetchCurrentBooked(context);
-      prob.fetchPastBooking(context);
+      proo.fetchCurrentBooked(context);
+      proo.fetchPastBooking(context);
     });
   }
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final proo = Provider.of<Services>(context);
     final pro = Provider.of<SignInSignUpProvider>(context);
     final prood = Provider.of<DashBoard>(context);
-    final prooh = Provider.of<HomePageServices>(context);
+    // final prooh = Provider.of<HomePageServices>(context);
     return Scaffold(
       drawer: Drawer(
         child: Container(
@@ -75,14 +64,14 @@ class _ProviderHomePageState extends State<ProviderHomePage> {
                 child: CircleAvatar(
                   radius: 40,
                   backgroundColor: page2Color,
-                  child: Text( pro.sHuserFirst != '' ? "${pro.sHuserFirst!.substring(0,1).toUpperCase()}${pro.sHuserLast!.substring(0,1).toUpperCase()}" : "" ,style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
+                  child: Text("${pro.sHuserFirst!.substring(0,1).toUpperCase()}${ pro.sHuserLast!.length > 0 ? pro.sHuserLast!.substring(0,1).toUpperCase() : ""}" ,style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold,color: Colors.white),),
                 ),
               ),
               SizedBox(
                 height: 10,
               ),
               Text(
-                pro.sHuserFirst != '' ? "${pro.sHuserFirst} ${pro.sHuserLast}" : "Loading...",
+                pro.sHuserFirst != '' ? "${pro.sHuserFirst} ${pro.sHuserLast!.length > 0 ? pro.sHuserLast : ""}" : "Loading...",
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -111,7 +100,7 @@ class _ProviderHomePageState extends State<ProviderHomePage> {
                       isSeller = !isSeller;
                     });
                     if(val == true){
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavBar()),(route) => false);
+                      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomNavBar()),(route) => false);
                     }
                   },
                 ),
@@ -136,6 +125,17 @@ class _ProviderHomePageState extends State<ProviderHomePage> {
                 },
                 leading: Icon(Icons.book_online),
                 title: Text("Bookings"),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
+              ListTile(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProviderBookings()));
+                },
+                leading: Icon(WebSymbols.chat),
+                title: Text("Messages"),
                 trailing: Icon(Icons.arrow_forward_ios),
               ),
               ListTile(
@@ -226,24 +226,7 @@ class _ProviderHomePageState extends State<ProviderHomePage> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-        DescribedFeatureOverlay(
-        featureId: 'services',
-        targetColor: Colors.white,
-        textColor: Colors.white,
-        backgroundColor: page1Color,
-        contentLocation: ContentLocation.trivial,
-        title: Text(
-          'Create Services',
-          style: TextStyle(fontSize: 20.0),
-        ),
-        pulseDuration: Duration(seconds: 1),
-        enablePulsingAnimation: true,
-        overflowMode: OverflowMode.clipContent,
-        openDuration: Duration(seconds: 1),
-        description: Text(
-            'Create your first Service\nglad to sale your service!'),
-        tapTarget: Icon(Typicons.popup),
-        child: IconButton(
+          IconButton(
               onPressed: () {
                 if(proo.services.length <= 0){
                   proo.fetchServices(context);
@@ -251,7 +234,7 @@ class _ProviderHomePageState extends State<ProviderHomePage> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ServicesScreen()));
               },
-              icon: Icon(Typicons.popup)))
+              icon: Icon(Typicons.popup))
         ],
       ),
       body: Padding(

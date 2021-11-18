@@ -5,16 +5,18 @@ import 'package:urban/routes/routes_names.dart';
 
 class LocalNotificationService {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
   static void initialize(BuildContext context) {
     final InitializationSettings initializationSettings =
-    InitializationSettings(
-        android: AndroidInitializationSettings("@mipmap/ic_launcher"),iOS: IOSInitializationSettings());
+        InitializationSettings(
+            android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+            iOS: IOSInitializationSettings());
 
-    _notificationsPlugin.initialize(initializationSettings,onSelectNotification: (String? route) async{
-      if(route != null){
+    _notificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? route) async {
+      if (route != null) {
         print("data $route");
-        if(route == 'audio'){
+        if (route == 'audio') {
           Navigator.of(context).pushNamed(audioIncomming);
         }
       }
@@ -22,9 +24,8 @@ class LocalNotificationService {
   }
 
   static void display(RemoteMessage message) async {
-
     try {
-      final id = DateTime.now().millisecondsSinceEpoch ~/1000;
+      final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
       final NotificationDetails notificationDetails = NotificationDetails(
           android: AndroidNotificationDetails(
@@ -38,15 +39,14 @@ class LocalNotificationService {
             fullScreenIntent: true,
             ongoing: true,
             autoCancel: false,
-            playSound: true,
+            playSound: false,
             timeoutAfter: 10000,
             visibility: NotificationVisibility.public,
           ),
-        iOS: IOSNotificationDetails(
-          presentSound: true,
-          presentAlert: true,
-        )
-      );
+          iOS: IOSNotificationDetails(
+            presentSound: false,
+            presentAlert: true,
+          ));
       await _notificationsPlugin.show(
         id,
         message.notification!.title,
