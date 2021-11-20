@@ -5,7 +5,6 @@ GlobalKey<FormState> kFomrKey = GlobalKey<FormState>();
 
 const String kSampleImage = "https://miro.medium.com/max/700/0*H3jZONKqRuAAeHnG.jpg";
 
-const String kFireBaseServerKey = "AAAAgOAqKNQ:APA91bGT7esl_C-opUmnsmh1JRQcMuGeRhCoQ9fP6GgW3_U6zX-n-aQkh0Y7J8s3OAzPtDHJu-gsWJ0z4l_smEw7Y_XRwsjky5hIExyq612IMrtNhjKKSXjJcZdpwlPb3lYN6zudHBPd";
 
 const Color kButtonColor = Color(0xffFAF338);
 const Color page1Color = Color(0xff17B5AF);
